@@ -1,0 +1,21 @@
+inherit_gem:
+  rubocop-github: config/default.yml
+
+AllCops:
+  TargetRubyVersion: 2.3
+  Exclude:
+    - 'db/schema.rb'
+    - 'db/migrate/*.rb'
+
+GitHub/RailsViewRenderLiteral:
+  Enabled: false
+
+GitHub/RailsControllerRenderLiteral:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 120
+
+Metrics/PerceivedComplexity:
+  Enabled: true
+  Max: 7
