@@ -149,10 +149,10 @@ PLATFORMS
 
 DEPENDENCIES
   pg_enums!
-  pry (~> 0.10.4)
+  pry
   rspec (~> 3.0)
-  rubocop (~> 0.46.0)
-  rubocop-github (~> 0.2.3)
+  rubocop
+  rubocop-github
 
 BUNDLED WITH
    1.14.6
