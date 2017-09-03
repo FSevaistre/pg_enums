@@ -30,7 +30,6 @@ It is a pain, but pg doesn't allow some operation within a transaction :'(
 Add the possibility to store bananas in the shelfs table
 
 ```ruby
-require "pg_enums"
 include PGEnums
 
 class AddSingle < ActiveRecord::Migration[5.1]
