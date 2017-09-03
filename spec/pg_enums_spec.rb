@@ -172,4 +172,70 @@ describe PGEnums do
     end
   end
 
+  describe "#delete_enum" do
+    before do
+      ActiveRecord::Base.connection.execute <<-SQL
+        CREATE TYPE test_enum AS ENUM ('Plapp', 'Zou');
+        CREATE TABLE test_table (id integer, test_enum test_enum);
+        INSERT INTO test_table (id, test_enum) VALUES ('1', 'Plapp');
+        INSERT INTO test_table (id, test_enum) VALUES ('2', 'Zou');
+      SQL
+    end
+    after do
+      ActiveRecord::Base.connection.execute <<-SQL
+        DROP TABLE test_table;
+      SQL
+    end
+    let(:test_table) do
+      ActiveRecord::Base.connection.execute <<-SQL
+        SELECT * FROM test_table
+      SQL
+    end
+    let(:expected_array) do
+      [
+        { "id" => 1 },
+        { "id" => 2 }
+      ]
+    end
+    subject { delete_enum(enum: "test_enum", table: "test_table", column: "test_enum") }
+
+    it "should delete the enum and the column" do
+      subject
+      expect(test_table).to match_array expected_array
+    end
+  end
+
+  describe "#create_enum" do
+    before do
+      ActiveRecord::Base.connection.execute <<-SQL
+        CREATE TABLE test_table (id integer);
+        INSERT INTO test_table (id) VALUES ('1');
+        INSERT INTO test_table (id) VALUES ('2');
+      SQL
+    end
+    after do
+      ActiveRecord::Base.connection.execute <<-SQL
+        DROP TABLE test_table;
+        DROP TYPE test_enum;
+      SQL
+    end
+    let(:test_table) do
+      ActiveRecord::Base.connection.execute <<-SQL
+        SELECT * FROM test_table
+      SQL
+    end
+    let(:expected_array) do
+      [
+        { "id" => 1, "test_enum" => nil },
+        { "id" => 2, "test_enum" => nil }
+      ]
+    end
+    subject { create_enum(enum_type: "test_enum", table: "test_table", column: "test_enum", values: ["Plapp", "Zou"]) }
+
+
+    it "should delete the enum and the column" do
+      subject
+      expect(test_table).to match_array expected_array
+    end
+  end
 end

@@ -42,7 +42,7 @@ module PGEnums
   end
 
   def delete_enum(enum:, table:, column:)
-    remove_column table, column
+    ActiveRecord::Migration.remove_column table, column
     ActiveRecord::Base.connection.execute <<-SQL
       DROP TYPE #{enum};
     SQL
@@ -52,7 +52,7 @@ module PGEnums
     ActiveRecord::Base.connection.execute <<-SQL
       CREATE TYPE #{enum_type} AS ENUM (#{"'" + values.join("', '") + "'"});
     SQL
-    add_column table, column, enum_type
+    ActiveRecord::Migration.add_column table, column, enum_type
   end
 
   private
